@@ -36,11 +36,10 @@ jobs:
   deploy:
     needs: build-and-analyze
     runs-on: ubuntu-latest
-
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - uses: actions/checkout@v4   # 🔥 مهم جداً
+      - uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -51,6 +50,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/flight-service:latest ./flight-service
-          
+
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/flight-service:latest
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/flight-service:latest
