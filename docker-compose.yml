@@ -1,0 +1,90 @@
+version: "3.9"
+
+services:
+
+  flight-service:
+    image: node:20
+    container_name: flight-service
+    working_dir: /app
+    volumes:
+      - ./flight-service:/app
+    ports:
+      - "3001:3000"
+    command: sh -c "npm install && npm run start:dev"
+    depends_on:
+      - flight-db
+    environment:
+      DB_HOST: flight-db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_NAME: flight_db
+
+  flight-db:
+    image: postgres:15
+    container_name: flight-db
+    restart: always
+    environment:
+      POSTGRES_DB: flight_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5435:5432"
+  
+  auth-service:
+    image: node:20
+    container_name: auth-service
+    working_dir: /app
+    volumes:
+      - ./auth-service:/app
+    ports:
+      - "3002:3000"
+    command: sh -c "npm install && npm run start:dev"
+    environment:
+      DB_HOST: auth-db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_NAME: auth_db
+    depends_on:
+      - auth-db
+
+  auth-db:
+    image: postgres:15
+    container_name: auth-db
+    restart: always
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5436:5432"
+
+  booking-service:
+    image: node:20
+    container_name: booking-service
+    working_dir: /app
+    volumes:
+      - ./booking-service:/app
+    ports:
+      - "3003:3000"
+    command: sh -c "npm install && npm run start:dev"
+    environment:
+      DB_HOST: booking-db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_NAME: booking_db
+    depends_on:
+      - booking-db
+
+  booking-db:
+    image: postgres:15
+    container_name: booking-db
+    restart: always
+    environment:
+      POSTGRES_DB: booking_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5437:5432"
