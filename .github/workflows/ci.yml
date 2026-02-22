@@ -28,7 +28,7 @@ jobs:
         working-directory: ./flight-service
 
       - name: Run SonarCloud analysis
-        uses: SonarSource/sonarcloud-github-action@v2
+        uses: SonarSource/sonarcloud-github-action@ffc3010689be73b8e5ae0c57ce35968afd7909e8   
         with:
           projectBaseDir: ./flight-service
         env:
